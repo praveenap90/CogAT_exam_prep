@@ -133,6 +133,22 @@ ol.steps li::before{content:counter(s); flex:none; width:32px; height:32px; bord
 .cell.q{font-size:44px; color:var(--c); border:3px dashed var(--c)}
 .mgrid3{display:grid; grid-template-columns:repeat(3,auto); gap:6px; padding:8px; background:#f3f5fb; border-radius:18px}
 .mgrid3 .cell{min-width:78px; min-height:78px}
+.clock{font-variant-numeric:tabular-nums}
+.clock.low{background:#fdeee9; border-color:var(--bad); color:var(--bad)}
+.qmap{display:flex; gap:6px; flex-wrap:wrap; justify-content:center; margin:0 0 12px}
+.qm{width:38px; height:38px; border-radius:10px; border:2px solid var(--line); background:#fff; font-weight:800}
+.qm.done{background:#e3e9fb; border-color:#9fb0e6}
+.qm.now{outline:3px solid var(--ink); outline-offset:1px}
+.opt.sel{border-color:var(--ink); background:#eef1fb}
+.opt.static{pointer-events:none}
+.badge{position:absolute; top:6px; right:8px; font-size:12px; font-weight:800}
+.navrow{display:flex; gap:10px; justify-content:space-between; flex-wrap:wrap; margin-top:16px}
+.confirm{margin-top:14px; background:#fff8e1; border-left:6px solid var(--gold); border-radius:12px; padding:12px 14px; font-size:17px}
+.setup .row{display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin-top:12px}
+.setup .row > label{font-weight:700; min-width:90px}
+details.rev{margin-top:10px; background:#fff; border:2px solid var(--line); border-radius:16px; padding:10px 14px; text-align:left}
+details.rev summary{cursor:pointer; font-weight:700; font-size:16px}
+details.rev .why{margin-top:10px; background:#f6f8fd; border-radius:12px; padding:10px 12px; font-size:16px}
 .seqrow{display:flex; gap:6px; flex-wrap:wrap; justify-content:center}
 .seqrow .cell{min-width:72px; min-height:72px}
 .caption{color:var(--muted); font-size:15px; text-align:center}
@@ -219,7 +235,12 @@ const ANALOGIES = {
     ["❄️ snow","🥶 cold","☀️ sun","🥵 hot","🍎 apple","🚗 car","🎈 balloon"],
     ["🐝 bee","🍯 honey","🕷️ spider","🕸️ web","🍎 apple","🏠 house","🌹 rose"],
     ["🥵 hot","🥶 cold","🌞 day","🌙 night","🍎 apple","🚗 car","🎈 balloon"],
-    ["🐒 monkey","🍌 banana","🐼 panda","🎋 bamboo","🍎 apple","🚗 car","🥛 milk"]
+    ["🐒 monkey","🍌 banana","🐼 panda","🎋 bamboo","🍎 apple","🚗 car","🥛 milk"],
+    ["👟 shoe","🦶 foot","🧢 cap","🙂 head","🍎 apple","🚗 car","🎈 balloon"],
+    ["🥄 spoon","🍲 soup","🍴 fork","🍝 pasta","🚗 car","🎈 balloon","🪑 chair"],
+    ["☀️ sun","🌞 day","🌙 moon","🌃 night","🍎 apple","🚗 car","🎈 balloon"],
+    ["🐄 cow","🌿 grass","🐼 panda","🎋 bamboo","🍎 apple","🚗 car","🥛 milk"],
+    ["🐱 cat","🐟 fish","🐿️ squirrel","🌰 nut","🍎 apple","🚗 car","🎈 balloon"]
   ],
   2: [
     ["👁️ eye","👓 glasses","👂 ear","🎧 headphones","🧢 cap","👟 shoe","🧤 mittens"],
@@ -230,7 +251,11 @@ const ANALOGIES = {
     ["✂️ scissors","📄 paper","🔪 knife","🍞 bread","🍎 apple","🚗 car","🎈 balloon"],
     ["🪥 toothbrush","🦷 teeth","🧼 soap","🖐️ hands","🍎 apple","🚗 car","🎈 balloon"],
     ["🐻 bear","🌲 forest","🐪 camel","🏜️ desert","🍎 apple","🚗 car","🎈 balloon"],
-    ["✈️ airplane","☁️ sky","⛵ boat","🌊 sea","🍎 apple","🚗 car","🎈 balloon"]
+    ["✈️ airplane","☁️ sky","⛵ boat","🌊 sea","🍎 apple","🚗 car","🎈 balloon"],
+    ["📺 TV","👀 watch","🎧 headphones","👂 listen","🍎 apple","🚗 car","🎈 balloon"],
+    ["🐑 sheep","🧶 wool","🐝 bee","🍯 honey","🍎 apple","🚗 car","🎈 balloon"],
+    ["😀 happy","😢 sad","👀 awake","😴 asleep","🍎 apple","🚗 car","🎈 balloon"],
+    ["🐓 rooster","🌅 morning","🦉 owl","🌙 night","🍎 apple","🚗 car","🎈 balloon"]
   ],
   3: [
     ["🌱 seedling","🌳 tree","🐣 chick","🐔 chicken","🥚 egg","🐟 fish","🍎 apple"],
@@ -240,7 +265,10 @@ const ANALOGIES = {
     ["🌅 morning","🥣 breakfast","🌙 night","🛏️ bed","🍎 apple","🚗 car","⚽ ball"],
     ["🥚 egg","🐔 chicken","🌰 acorn","🌳 oak tree","🐟 fish","🚗 car","🍎 apple"],
     ["🌅 sunrise","🌇 sunset","🔓 unlocked","🔒 locked","🍎 apple","🚗 car","🎈 balloon"],
-    ["🏫 school","🧑‍🏫 teacher","🏥 hospital","🧑‍⚕️ doctor","🍎 apple","🚗 car","🎈 balloon"]
+    ["🏫 school","🧑‍🏫 teacher","🏥 hospital","🧑‍⚕️ doctor","🍎 apple","🚗 car","🎈 balloon"],
+    ["🌾 wheat","🍞 bread","🥛 milk","🧀 cheese","🍎 apple","🚗 car","🎈 balloon"],
+    ["🔭 telescope","⭐ stars","🔬 microscope","🦠 germs","🍎 apple","🚗 car","🎈 balloon"],
+    ["🎻 violin","🎵 music","🖌️ brush","🎨 art","🍎 apple","🚗 car","🎈 balloon"]
   ]
 };
 const SENTENCES = {
@@ -255,7 +283,15 @@ const SENTENCES = {
     ["You sleep in this.","🛏️ bed","🚗 car","🍎 apple"],
     ["You eat soup with this.","🥄 spoon","📖 book","👟 shoe"],
     ["This animal says meow.","🐱 cat","🐶 dog","🐄 cow"],
-    ["You use these to hear sounds.","👂 ears","👀 eyes","👃 nose"]
+    ["You use these to hear sounds.","👂 ears","👀 eyes","👃 nose"],
+    ["You wear this around your neck in winter.","🧣 scarf","🩴 sandals","🕶️ sunglasses"],
+    ["This animal has a long trunk.","🐘 elephant","🐱 cat","🐟 fish"],
+    ["You use this to sweep the floor.","🧹 broom","🥄 spoon","📖 book"],
+    ["This fruit is yellow and long.","🍌 banana","🍎 apple","🍇 grapes"],
+    ["You use this to write.","✏️ pencil","🍴 fork","🧦 sock"],
+    ["You use this to take pictures.","📷 camera","🥄 spoon","🧦 sock"],
+    ["You can read this.","📖 book","🍎 apple","🪑 chair"],
+    ["It is hot and it shines in the day.","☀️ sun","🌙 moon","⭐ star"]
   ],
   2: [
     ["It is cold and white and falls in winter.","❄️ snow","🔥 fire","🌵 cactus"],
@@ -268,7 +304,13 @@ const SENTENCES = {
     ["Birds fly in the ______.","☁️ sky","🌊 sea","🛏️ bed"],
     ["You carry your lunch to school in a ______.","🎒 backpack","🪑 chair","🛏️ bed"],
     ["A baby dog is called a ______.","🐶 puppy","🐱 kitten","🐥 chick"],
-    ["You need a ______ to open a locked door.","🔑 key","🍎 apple","🪑 chair"]
+    ["You need a ______ to open a locked door.","🔑 key","🍎 apple","🪑 chair"],
+    ["You sit on this at the table.","🪑 chair","🛏️ bed","🚿 shower"],
+    ["A baby cat is called a ______.","🐱 kitten","🐶 puppy","🐥 chick"],
+    ["You wear this to protect your head on a bike.","⛑️ helmet","👒 hat","🧦 sock"],
+    ["You look through this to see far away things.","🔭 telescope","🥄 spoon","🧦 sock"],
+    ["You use this to measure how long something is.","📏 ruler","⏰ clock","🌡️ thermometer"],
+    ["You use this to see how hot or cold it is.","🌡️ thermometer","📏 ruler","⏰ clock"]
   ],
   3: [
     ["You wear it on your feet and it keeps you warm.","🧦 socks","🧤 gloves","🩴 sandals"],
@@ -280,7 +322,12 @@ const SENTENCES = {
     ["It lives on a farm and gives us eggs.","🐔 hen","🐄 cow","🐖 pig"],
     ["You use it in the rain and it has a handle.","☂️ umbrella","🧥 coat","🧢 cap"],
     ["It is red and you can eat it.","🍎 apple","🌹 rose","🚒 fire truck"],
-    ["It is small, it flies, and it makes honey.","🐝 bee","🦋 butterfly","🐜 ant"]
+    ["It is small, it flies, and it makes honey.","🐝 bee","🦋 butterfly","🐜 ant"],
+    ["It is yellow, it is long, and monkeys like it.","🍌 banana","🍋 lemon","🌽 corn"],
+    ["It has a tail and it barks.","🐶 dog","🐱 cat","🐴 horse"],
+    ["You wear them on your hands and they keep you warm.","🧤 gloves","🧦 socks","🧣 scarf"],
+    ["It is a bird that swims but cannot fly.","🐧 penguin","🦆 duck","🦅 eagle"],
+    ["It has eight legs and spins a web.","🕷️ spider","🐜 ant","🦋 butterfly"]
   ]
 };
 const VCLASS = {
@@ -292,7 +339,13 @@ const VCLASS = {
     ["🌹 rose","🌻 sunflower","🌷 tulip","🌼 daisy","🐟 fish","🧱 brick","flowers"],
     ["🐔 chicken","🦆 duck","🦉 owl","🦜 parrot","🐶 dog","🐟 fish","birds"],
     ["🥕 carrot","🥦 broccoli","🌽 corn","🥔 potato","🍌 banana","🪑 chair","vegetables"],
-    ["🏠 house","🏫 school","🏥 hospital","🏪 store","🐶 dog","🍎 apple","buildings"]
+    ["🏠 house","🏫 school","🏥 hospital","🏪 store","🐶 dog","🍎 apple","buildings"],
+    ["🐱 cat","🐶 dog","🐹 hamster","🐠 goldfish","🦁 lion","🐘 elephant","pets"],
+    ["🥛 milk","🧃 juice","💧 water","🥤 soda","🍎 apple","🪑 chair","things we drink"],
+    ["🔴 red","🔵 blue","🟢 green","🟡 yellow","🍎 apple","🐶 dog","colors"],
+    ["✏️ pencil","📏 ruler","📖 book","🖍️ crayon","🍕 pizza","🚗 car","things we use at school"],
+    ["🐄 cow","🐖 pig","🐔 hen","🐑 sheep","🦁 lion","🐘 elephant","farm animals"],
+    ["🌳 tree","🌻 sunflower","🌵 cactus","🌴 palm tree","🐶 dog","🚗 car","plants"]
   ],
   2: [
     ["🥄 spoon","🍴 fork","🔪 knife","🥢 chopsticks","🪑 chair","🎈 balloon","things we eat with"],
@@ -304,7 +357,11 @@ const VCLASS = {
     ["🔔 bell","🥁 drum","🎸 guitar","🎹 piano","🪑 chair","🧱 brick","things that make music"],
     ["🧢 cap","👒 hat","⛑️ helmet","🎩 top hat","👟 shoe","🧦 sock","things we wear on our heads"],
     ["🌞 sun","🌙 moon","⭐ star","☁️ cloud","🚗 car","🍎 apple","things we see in the sky"],
-    ["🧸 teddy bear","🎲 dice","🧩 puzzle piece","🪁 kite","🍕 pizza","🪑 chair","toys and games"]
+    ["🧸 teddy bear","🎲 dice","🧩 puzzle piece","🪁 kite","🍕 pizza","🪑 chair","toys and games"],
+    ["🔨 hammer","🔧 wrench","🪚 saw","🪛 screwdriver","🍎 apple","🪑 chair","tools"],
+    ["🧑‍🚒 firefighter","🧑‍⚕️ doctor","👮 police officer","🧑‍🏫 teacher","🐶 dog","🍎 apple","people who help us"],
+    ["🌧️ rain","⛈️ storm","🌨️ snow","🌬️ wind","🐶 dog","🪑 chair","kinds of weather"],
+    ["🧁 cupcake","🍪 cookie","🍩 donut","🍰 cake","🥦 broccoli","🥕 carrot","sweet treats"]
   ],
   3: [
     ["🐦 bird","✈️ airplane","🦋 butterfly","🚁 helicopter","🐢 turtle","🚗 car","things that can fly"],
@@ -315,7 +372,11 @@ const VCLASS = {
     ["🐟 fish","🐢 turtle","🦆 duck","🐸 frog","🐱 cat","🐿️ squirrel","animals that swim"],
     ["🍯 honey","🥛 milk","🥚 egg","🧀 cheese","🥕 carrot","🍞 bread","foods that come from animals"],
     ["🔥 fire","☀️ sun","🌋 volcano","🕯️ candle","🧊 ice","❄️ snow","things that are hot"],
-    ["🌧️ rain","💧 drop","🚿 shower","🌊 wave","🏜️ desert","🌵 cactus","things made of water"]
+    ["🌧️ rain","💧 drop","🚿 shower","🌊 wave","🏜️ desert","🌵 cactus","things made of water"],
+    ["🍎 apple","🌹 rose","🚒 fire truck","🍓 strawberry","🐟 fish","🌳 tree","things that are red"],
+    ["🔊 speaker","📣 megaphone","🔔 bell","🎺 trumpet","🧱 brick","🪑 chair","things that are loud"],
+    ["⏰ clock","⌚ watch","⏳ hourglass","📅 calendar","🍎 apple","🚗 car","things that tell time"],
+    ["🐘 elephant","🐋 whale","🦒 giraffe","🦏 rhino","🐁 mouse","🐜 ant","big animals"]
   ]
 };
 function genAnalogy(L) {
@@ -899,7 +960,7 @@ const SEE = {
 };
 
 /* ============ app state ============ */
-const S = { session: null, settings: { len: 8, speak: true, hints: true, level: 0, seenIntro: false }, stats: { stars: 0, played: 0 } };
+const S = { session: null, test: null, settings: { len: 8, speak: true, hints: true, level: 0, seenIntro: false, testSize: 'short', testPace: 'standard' }, stats: { stars: 0, played: 0 } };
 const PRAISE = ['Great thinking!', 'You got it!', 'Nice job!', 'Super smart!', 'Brain power!', 'Awesome!'];
 const KEY = 'brainPuzzlePlayground.v2';
 function load() { try { const d = JSON.parse(localStorage.getItem(KEY)); if (d) { S.stats = Object.assign(S.stats, d.stats); S.settings = Object.assign(S.settings, d.settings); } } catch (e) {} }
@@ -952,6 +1013,10 @@ function renderHome() {
     <div class="mixcard">
       <div><h2>🎲 Surprise Mix</h2><p>A bit of everything, like the real test.</p></div>
       <button class="btn primary big" style="--c:var(--ink)" data-act="start">Let's go!</button>
+    </div>
+    <div class="mixcard">
+      <div><h2>⏱️ Practice Test</h2><p>A timed, test-style session with 3 sections. No hints, and the answers come at the end.</p></div>
+      <button class="btn primary big" style="--c:var(--nonv)" data-act="testhome">Set up a test</button>
     </div>
     <div class="mixcard">
       <div><h2>📖 New here? See the puzzle types</h2><p>A quick guide to all nine kinds of puzzles, with a short practice round for each.</p></div>
@@ -1027,6 +1092,11 @@ function renderIntro() {
     </section>
 
     <section class="isec">
+      <h2>⏱️ Practice Test: when you feel ready</h2>
+      <p>Practice Test works like a real test session. There are three timed sections (Verbal, Number, Shapes), no hints, and no right or wrong feedback until the end. You can go back and change answers. At the end you get a full report and a review of every puzzle you missed.</p>
+    </section>
+
+    <section class="isec">
       <h2>🛠️ Handy buttons</h2>
       <div class="buttonsguide">
         <div>🔊 <b>Read aloud:</b> plays the puzzle again.</div>
@@ -1043,6 +1113,7 @@ function renderIntro() {
         <li>• Short sessions of 10 to 15 minutes work best. Stop while it is still fun.</li>
         <li>• Ask "How did you figure it out?" Explaining the thinking helps more than speed.</li>
         <li>• These are original practice puzzles, not real test questions. Scores here are for fun and practice, not CogAT scores.</li>
+        <li>• Practice Test timers are for practice only. They are not the official test times.</li>
         <li>• Stars and settings are saved on this device and browser.</li>
       </ul>
     </section>
@@ -1153,6 +1224,207 @@ function renderResults() {
     </div>`;
 }
 
+/* ============ practice test mode ============ */
+const PACE = { relaxed: 75, standard: 60, quick: 45 };
+const PACE_NAME = { relaxed: 'Relaxed', standard: 'Standard', quick: 'Quick' };
+const fmt = t => { t = Math.max(0, t); return Math.floor(t / 60) + ':' + String(t % 60).padStart(2, '0'); };
+const mins = sec => String(+(sec / 60).toFixed(1));
+function testPlan() {
+  const per = S.settings.testSize === 'full' ? 4 : 2, perSection = per * 3;
+  return { per, perSection, total: perSection * 3, secondsPerSection: perSection * PACE[S.settings.testPace] };
+}
+function buildTest() {
+  const p = testPlan(), lvl = S.settings.level;
+  return ['verbal', 'quant', 'nonverbal'].map(bk => {
+    const qs = [];
+    Object.values(BAT[bk].subs).forEach(sub => {
+      const seen = new Set();
+      for (let i = 0, guard = 0; i < p.per && guard < 300; guard++) {
+        const L = lvl || (p.per === 1 ? 2 : 1 + Math.round(i * 2 / (p.per - 1)));
+        const q = sub.gen(L); q.level = L;
+        if (seen.has(q.say) && guard < 200) continue;
+        seen.add(q.say); qs.push(q); i++;
+      }
+    });
+    return { bat: bk, name: BAT[bk].name, qs, answers: qs.map(() => null), limit: p.secondsPerSection, used: 0, ended: false, timedOut: false };
+  });
+}
+const tsec = () => S.test.secs[S.test.si];
+const tq = () => tsec().qs[S.test.qi];
+function stopTimer() { if (S.test && S.test.timer) { clearInterval(S.test.timer); S.test.timer = null; } }
+function leaveTest() { stopTimer(); S.test = null; }
+function testSpeak() { if (S.test && S.test.phase === 'section' && tsec().bat === 'verbal' && S.settings.speak) speak(tq().say); }
+function remaining() { return Math.ceil((S.test.endsAt - Date.now()) / 1000); }
+function tick() {
+  const t = S.test;
+  if (!t || t.phase !== 'section') { stopTimer(); return; }
+  const r = remaining(), el = document.getElementById('clock');
+  if (el) { el.textContent = '⏱️ ' + fmt(r); el.className = 'starpill clock' + (r <= 60 ? ' low' : ''); }
+  if (r <= 0) endSection(true);
+}
+function startTest() {
+  stopSpeech(); stopTimer(); S.session = null;
+  S.test = { secs: buildTest(), si: 0, qi: 0, phase: 'section', confirm: null, timer: null, endsAt: 0, startedAt: 0 };
+  beginSection(0);
+}
+function beginSection(i) {
+  const t = S.test; stopTimer();
+  t.si = i; t.qi = 0; t.phase = 'section'; t.confirm = null;
+  t.startedAt = Date.now(); t.endsAt = t.startedAt + t.secs[i].limit * 1000;
+  t.timer = typeof setInterval === 'function' ? setInterval(tick, 1000) : null;
+  renderTestQ(); window.scrollTo({ top: 0 });
+  testSpeak();
+}
+function endSection(timedOut) {
+  const t = S.test; if (!t || t.phase !== 'section') return;
+  stopTimer(); stopSpeech();
+  const sec = tsec();
+  sec.used = Math.min(sec.limit, Math.round((Date.now() - t.startedAt) / 1000)); sec.timedOut = !!timedOut; sec.ended = true;
+  t.confirm = null;
+  if (t.si < t.secs.length - 1) { t.phase = 'break'; renderTestBreak(); }
+  else { t.phase = 'done'; S.stats.played++; save(); renderTestResults(); }
+  window.scrollTo({ top: 0 });
+}
+function renderTestSetup() {
+  S.session = null; leaveTest();
+  const p = testPlan();
+  const seg = (act, cur, list) => list.map(([v, label]) => `<button class="seg ${cur === v ? 'on' : ''}" data-act="${act}" data-v="${v}">${label}</button>`).join('');
+  const lv = [1, 2, 3, 0].map(v => `<button class="seg ${S.settings.level === v ? 'on' : ''}" data-act="tlevel" data-v="${v}">${LV[v].icon} ${LV[v].name}</button>`).join('');
+  $app().innerHTML = `
+    <div class="topbar"><button class="btn ghost" data-act="home">← Home</button><span class="starpill">⭐ ${S.stats.stars}</span></div>
+    <div class="introhero"><h1>⏱️ Practice Test</h1><p>A test-style session to practice sitting, thinking and finishing on time. It is practice only, not a real CogAT score.</p></div>
+    <section class="isec setup">
+      <h2>How it works</h2>
+      <ul class="plain" style="font-size:17px;gap:6px">
+        <li>• <b>3 sections:</b> Verbal, then Number, then Shapes. Each has 3 puzzle types.</li>
+        <li>• <b>A timer</b> runs for each section. When time is up, the next section starts.</li>
+        <li>• <b>No hints and no right or wrong feedback</b> until the very end.</li>
+        <li>• You can <b>go back</b> and change an answer, or skip a hard one and return to it.</li>
+        <li>• At the end you get a <b>report</b> and a review of every puzzle you missed, with the reasons.</li>
+      </ul>
+    </section>
+    <section class="isec setup">
+      <h2>Choose your test</h2>
+      <div class="row"><label>Length</label><span class="segs">${seg('tsize', S.settings.testSize, [['short', 'Short · 18 puzzles'], ['full', 'Full · 36 puzzles']])}</span></div>
+      <div class="row"><label>Pace</label><span class="segs">${seg('tpace', S.settings.testPace, [['relaxed', 'Relaxed'], ['standard', 'Standard'], ['quick', 'Quick']])}</span></div>
+      <div class="row"><label>Level</label><span class="segs">${lv}</span></div>
+      <div class="row"><button class="tog ${S.settings.speak ? 'on' : ''}" data-act="ttoggle" aria-pressed="${S.settings.speak}">🔊 Read the Verbal section aloud</button></div>
+      <p class="caption" style="margin-top:12px;text-align:left">${p.total} puzzles in all: ${p.perSection} per section, about ${mins(p.secondsPerSection)} minutes per section (${PACE[S.settings.testPace]} seconds per puzzle). ${S.settings.level === 0 ? 'Ladder starts each puzzle type easy and gets harder.' : ''}</p>
+    </section>
+    <div class="introcta"><button class="btn primary big" style="--c:var(--nonv)" data-act="teststart">Start the test ➜</button></div>`;
+  window.scrollTo({ top: 0 });
+}
+function renderTestQ() {
+  const t = S.test, sec = tsec(), q = tq(), b = BAT[q.battery], cur = sec.answers[t.qi], n = sec.qs.length;
+  const map = sec.qs.map((_, i) => `<button class="qm ${sec.answers[i] !== null ? 'done' : ''} ${i === t.qi ? 'now' : ''}" data-act="tgo" data-q="${i}" aria-label="Go to puzzle ${i + 1}">${i + 1}</button>`).join('');
+  const opts = q.opts.map((o, i) => `<button class="opt ${cur === i ? 'sel' : ''}" data-act="tpick" data-i="${i}" aria-pressed="${cur === i}" aria-label="Choice ${'ABCD'[i]}"><span class="key">${'ABCD'[i]}</span>${o.html}</button>`).join('');
+  const unans = sec.answers.filter(a => a === null).length;
+  let conf = '';
+  if (t.confirm === 'finish') conf = `<div class="confirm"><b>${unans ? `You have ${unans} puzzle${unans > 1 ? 's' : ''} without an answer.` : 'Every puzzle has an answer.'}</b> Finish this section now?<div class="actions"><button class="btn primary" style="--c:var(--good)" data-act="tfinishyes">Yes, finish</button><button class="btn" data-act="tfinishno">Keep working</button></div></div>`;
+  else if (t.confirm === 'quit') conf = `<div class="confirm"><b>Quit the practice test?</b> Your answers so far will be lost.<div class="actions"><button class="btn primary" style="--c:var(--bad)" data-act="tquityes">Yes, quit</button><button class="btn" data-act="tquitno">Keep going</button></div></div>`;
+  const last = t.qi === n - 1, r = remaining();
+  $app().innerHTML = `
+    <div class="topbar">
+      <button class="btn ghost" data-act="tquit">✕ Quit</button>
+      <div class="caption" style="flex:1;font-weight:700">Section ${t.si + 1} of ${t.secs.length}: ${sec.name}</div>
+      <span class="starpill clock${r <= 60 ? ' low' : ''}" id="clock" aria-live="off">⏱️ ${fmt(r)}</span>
+    </div>
+    <div class="qmap" aria-label="Puzzle map">${map}</div>
+    <div class="qcard" style="--c:var(${b.color})">
+      <span class="tag">${b.emoji} ${q.sub}</span><span class="caption" style="margin-left:10px">Puzzle ${t.qi + 1} of ${n}</span>
+      <div class="prompt"><button class="speak" data-act="tspeak" aria-label="Read the puzzle aloud">🔊</button><span>${q.prompt}</span></div>
+      <div class="visual">${q.visual}</div>
+      <div class="options">${opts}</div>
+      <div class="navrow">
+        <button class="btn" data-act="tprev" ${t.qi === 0 ? 'disabled style="opacity:.4;cursor:default"' : ''}>← Back</button>
+        ${last ? `<button class="btn primary" style="--c:var(${b.color})" data-act="tfinish">Finish section ✔</button>` : `<button class="btn primary" style="--c:var(${b.color})" data-act="tnext">Next →</button>`}
+      </div>
+      ${conf}
+    </div>`;
+}
+function renderTestBreak() {
+  const t = S.test, done = tsec(), nxt = t.secs[t.si + 1], answered = done.answers.filter(a => a !== null).length;
+  $app().innerHTML = `
+    <div class="results">
+      <h2>✅ Section ${t.si + 1} done: ${done.name}</h2>
+      <p style="margin-top:8px">You answered ${answered} of ${done.qs.length} puzzles${done.timedOut ? ' before time ran out' : ''}.</p>
+      <p class="caption" style="margin-top:10px">Take a breath. Stretch. Have a sip of water.</p>
+      <div class="rbtns"><button class="btn primary big" style="--c:var(${BAT[nxt.bat].color})" data-act="tcontinue">Start Section ${t.si + 2}: ${nxt.name} ➜</button></div>
+      <p class="caption" style="margin-top:10px">Next: ${nxt.qs.length} puzzles, ${mins(nxt.limit)} minutes.</p>
+    </div>`;
+}
+function renderTestResults() {
+  const t = S.test, byType = {}, byLvl = {}, tot = { c: 0, n: 0, u: 0 }, miss = [];
+  const secRows = t.secs.map(sec => {
+    let c = 0, u = 0;
+    sec.qs.forEach((q, i) => {
+      const a = sec.answers[i], ok = a === q.ans;
+      if (a === null) u++;
+      if (ok) c++; else miss.push({ sec, q, a, i });
+      const bt = byType[q.sub] = byType[q.sub] || { c: 0, n: 0, bat: q.battery, sub: Object.keys(BAT[q.battery].subs).find(k => BAT[q.battery].subs[k].name === q.sub) };
+      bt.n++; if (ok) bt.c++;
+      const bl = byLvl[q.level] = byLvl[q.level] || { c: 0, n: 0 };
+      bl.n++; if (ok) bl.c++;
+    });
+    tot.c += c; tot.n += sec.qs.length; tot.u += u;
+    return `<div class="brow"><span class="lbl">${BAT[sec.bat].emoji} ${sec.name}${sec.timedOut ? ' ⏰' : ''}</span><span class="bar"><i style="width:${Math.round(100 * c / sec.qs.length)}%"></i></span><span class="n">${c}/${sec.qs.length}</span></div><div class="caption" style="text-align:left;margin:-4px 0 4px 0">Time used: ${fmt(sec.used)} of ${fmt(sec.limit)}${u ? ` · ${u} unanswered` : ''}</div>`;
+  }).join('');
+  const rowsOf = (obj, label) => Object.entries(obj).map(([k, v]) => `<div class="brow"><span class="lbl">${label(k)}</span><span class="bar"><i style="width:${Math.round(100 * v.c / v.n)}%"></i></span><span class="n">${v.c}/${v.n}</span></div>`).join('');
+  const pct = tot.n ? tot.c / tot.n : 0;
+  const msg = pct >= 0.85 ? 'Fantastic work! 🌟' : pct >= 0.65 ? 'Great job! 🎉' : pct >= 0.4 ? 'Nice effort. Keep practicing! 💪' : 'Good start! Every practice makes it easier. 🌱';
+  const weak = Object.values(byType).filter(v => v.n >= 2 && v.c / v.n < 1).sort((a, b) => a.c / a.n - b.c / b.n)[0];
+  const review = miss.map(({ sec, q, a, i }) => {
+    const b = BAT[q.battery];
+    const optsR = q.opts.map((o, k) => {
+      const cls = k === q.ans ? 'right' : k === a ? 'wrong' : 'dim';
+      const badge = k === q.ans ? '<span class="badge" style="color:var(--good)">✔ right answer</span>' : k === a ? '<span class="badge" style="color:var(--bad)">✖ your answer</span>' : '';
+      return `<div class="opt static ${cls}"><span class="key">${'ABCD'[k]}</span>${badge}${o.html}</div>`;
+    }).join('');
+    return `<details class="rev"><summary>${b.emoji} ${sec.name} · ${q.sub} · puzzle ${i + 1} ${a === null ? '(no answer)' : '(missed)'}</summary><div class="visual">${q.visual}</div><div class="options">${optsR}</div><div class="why"><b>Why:</b> ${q.why}</div></details>`;
+  }).join('');
+  $app().innerHTML = `
+    <div class="results">
+      <h2>${msg}</h2>
+      <div class="bigscore">${tot.c} / ${tot.n}</div>
+      <p class="caption">${tot.u ? `${tot.u} puzzle${tot.u > 1 ? 's' : ''} left unanswered. ` : ''}This is practice, not a CogAT score.</p>
+      <div class="break">
+        <h3>By section</h3>${secRows}
+        <h3>By puzzle type</h3>${rowsOf(byType, k => k)}
+        <h3>By level</h3>${Object.keys(byLvl).sort().map(k => `<div class="brow"><span class="lbl">${LV[k].icon} ${LV[k].name}</span><span class="bar"><i style="width:${Math.round(100 * byLvl[k].c / byLvl[k].n)}%"></i></span><span class="n">${byLvl[k].c}/${byLvl[k].n}</span></div>`).join('')}
+      </div>
+      ${weak ? `<p style="margin-top:14px;font-weight:700">Most to practice: ${weak.sub}</p>` : '<p style="margin-top:14px;font-weight:700">No weak spots this time. Great!</p>'}
+      <div class="rbtns">
+        ${weak ? `<button class="btn primary big" style="--c:var(--good)" data-act="start" data-bat="${weak.bat}" data-sub="${weak.sub}">Practice ${BAT[weak.bat].subs[weak.sub].name}</button>` : ''}
+        <button class="btn big" data-act="testhome">Take another test</button>
+        <button class="btn big" data-act="home">Home</button>
+      </div>
+      ${miss.length ? `<div class="break" style="max-width:640px"><h3>Review the ${miss.length} I missed</h3>${review}</div>` : ''}
+    </div>`;
+}
+const TEST_ACTS = new Set(['testhome', 'tsize', 'tpace', 'tlevel', 'ttoggle', 'teststart', 'tpick', 'tgo', 'tprev', 'tnext', 'tspeak', 'tfinish', 'tfinishyes', 'tfinishno', 'tquit', 'tquityes', 'tquitno', 'tcontinue']);
+function testAction(a, el) {
+  const t = S.test;
+  if (a === 'testhome') renderTestSetup();
+  else if (a === 'tsize') { S.settings.testSize = el.dataset.v; save(); renderTestSetup(); }
+  else if (a === 'tpace') { S.settings.testPace = el.dataset.v; save(); renderTestSetup(); }
+  else if (a === 'tlevel') { S.settings.level = +el.dataset.v; save(); renderTestSetup(); }
+  else if (a === 'ttoggle') { S.settings.speak = !S.settings.speak; save(); renderTestSetup(); }
+  else if (a === 'teststart') startTest();
+  else if (!t || t.phase === 'done') return;
+  else if (a === 'tcontinue') { if (t.phase === 'break') beginSection(t.si + 1); }
+  else if (t.phase !== 'section') return;
+  else if (a === 'tpick') { tsec().answers[t.qi] = +el.dataset.i; renderTestQ(); }
+  else if (a === 'tgo') { t.qi = +el.dataset.q; t.confirm = null; renderTestQ(); testSpeak(); }
+  else if (a === 'tprev') { if (t.qi > 0) { t.qi--; t.confirm = null; renderTestQ(); testSpeak(); } }
+  else if (a === 'tnext') { if (t.qi < tsec().qs.length - 1) { t.qi++; t.confirm = null; renderTestQ(); testSpeak(); } }
+  else if (a === 'tspeak') speak(tq().say);
+  else if (a === 'tfinish') { t.confirm = 'finish'; renderTestQ(); }
+  else if (a === 'tfinishno' || a === 'tquitno') { t.confirm = null; renderTestQ(); }
+  else if (a === 'tfinishyes') endSection(false);
+  else if (a === 'tquit') { t.confirm = 'quit'; renderTestQ(); }
+  else if (a === 'tquityes') { stopSpeech(); leaveTest(); renderHome(); window.scrollTo({ top: 0 }); }
+}
+
 /* ============ game flow ============ */
 function startSession(spec, queue, opts) {
   stopSpeech();
@@ -1180,12 +1452,13 @@ function next() {
 function onClick(e) {
   const t = e.target.closest('[data-act]'); if (!t) return;
   const a = t.dataset.act;
-  if (a === 'start') startSession({ bat: t.dataset.bat, sub: t.dataset.sub });
+  if (TEST_ACTS.has(a)) { testAction(a, t); return; }
+  if (a === 'start') { leaveTest(); startSession({ bat: t.dataset.bat, sub: t.dataset.sub }); }
   else if (a === 'try') startSession({ bat: t.dataset.bat, sub: t.dataset.sub }, null, { len: 3, level: 1 });
   else if (a === 'guide') renderGuide();
   else if (a === 'intro') renderIntro();
   else if (a === 'begin') { S.settings.seenIntro = true; save(); renderHome(); window.scrollTo({ top: 0 }); }
-  else if (a === 'home') { stopSpeech(); renderHome(); window.scrollTo({ top: 0 }); }
+  else if (a === 'home') { stopSpeech(); leaveTest(); renderHome(); window.scrollTo({ top: 0 }); }
   else if (a === 'level') { S.settings.level = +t.dataset.v; save(); renderHome(); }
   else if (a === 'len') { S.settings.len = +t.dataset.v; save(); renderHome(); }
   else if (a === 'toggle') { const k = t.dataset.k; S.settings[k] = !S.settings[k]; save(); renderHome(); }
@@ -1197,6 +1470,14 @@ function onClick(e) {
   else if (a === 'missed') startSession(S.session.spec, S.session.res.filter(r => !r.ok).map(r => r.q), S.session.opts);
 }
 function onKey(e) {
+  if (S.test && S.test.phase === 'section') {
+    const t = S.test, sec = tsec(), k = e.key.toLowerCase();
+    const i = '1234'.indexOf(k) >= 0 ? '1234'.indexOf(k) : 'abcd'.indexOf(k);
+    if (k.length === 1 && i >= 0 && i < tq().opts.length) { sec.answers[t.qi] = i; renderTestQ(); }
+    else if (e.key === 'ArrowRight' && t.qi < sec.qs.length - 1) { t.qi++; t.confirm = null; renderTestQ(); testSpeak(); }
+    else if (e.key === 'ArrowLeft' && t.qi > 0) { t.qi--; t.confirm = null; renderTestQ(); testSpeak(); }
+    return;
+  }
   const s = S.session; if (!s || !s.queue[s.i] || s.i >= s.queue.length) return;
   if (document.querySelector('.results')) return;
   const k = e.key.toLowerCase(), i = '1234'.indexOf(k) >= 0 ? '1234'.indexOf(k) : 'abcd'.indexOf(k);
